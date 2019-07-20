@@ -1,7 +1,6 @@
 {
   "name": "expense_tracker",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
@@ -28,5 +27,15 @@
     "passport-local": "^1.0.0",
     "sequelize": "^5.10.1",
     "sequelize-cli": "^5.5.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacs0110/node_expense_tracker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jacs0110/node_expense_tracker/issues"
+  },
+  "homepage": "https://github.com/jacs0110/node_expense_tracker#readme",
+  "description": ""
 }

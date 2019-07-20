@@ -13,8 +13,9 @@ app.use(express.static('public'))
 
 // connect to db
 const db = require('./models')
+const Record = db.Record
 // const User = db.User
-// const Expense = db.Expense
+
 
 // set up the app
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))

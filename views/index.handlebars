@@ -1,13 +1,13 @@
-<a href="/todos/new" class="btn btn-primary mb-3">Create</a>
+<a href="/records/new" class="btn btn-primary mb-3">Create</a>
 <ul class="list-group">
-  {{!-- {{#each todos}} --}}
+  {{#each records}}
   <li class="list-group-item">
     <div class="row">
       <div class="col-auto mr-auto">
-        <h4 style="display: inline;vertical-align: middle;"> Category </h4>
-        <h4 style="display: inline;vertical-align: middle;"> Name </h4>
-        <h4 style="display: inline;vertical-align: middle;"> Date </h4>
-        <h4 style="display: inline;vertical-align: middle;"> Expense </h4>
+        <h4 style="display: inline;vertical-align: middle;"> {{this.category}} </h4>
+        <h4 style="display: inline;vertical-align: middle;"> {{this.name}} </h4>
+        <h4 style="display: inline;vertical-align: middle;"> {{this.date}} </h4>
+        <h4 style="display: inline;vertical-align: middle;"> {{this.amount}} </h4>
       </div>
       <div class="col-auto">
         <a href="/records/{{{this.id}}}/edit" class="btn btn-success">edit</a>
@@ -17,5 +17,5 @@
       </div>
     </div>
   </li>
-  {{!-- {{/each}} --}}
+  {{/each}}
 </ul>

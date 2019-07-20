@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const db = require('../models')
-// const Expense = db.Expense
+const Record = db.Record
 // const User = dn.User
 
 // auth
@@ -17,29 +17,74 @@ router.get('/new', (req, res) => {
   res.render('new')
 })
 
-// show an expense page
-router.get('/:id', (req, res) => {
-  res.send(`show an expense page: ${req.params.id}`)
-})
-
 // create a new expense (action)
 router.post('/', (req, res) => {
-  res.send('create a new expense (action)')
+  Record.create({
+    date: req.body.date,
+    category: req.body.category,
+    name: req.body.name,
+    amount: parseFloat(req.body.record),
+  })
+    .then((record) => {
+      return res.redirect('/')
+    })
+    .catch((error) => {
+      return res.status(422).json(error)
+    })
 })
 
 // edit an expense page
 router.get('/:id/edit', (req, res) => {
-  res.render('edit')
+  Record.findOne({
+    where: {
+      Id: req.params.id
+    }
+  })
+    .then((record) => {
+      return res.render('edit', { record: record })
+    })
+    .catch((error) => {
+      return res.status(422).json(error)
+    })
 })
 
 // edit an expense (action)
-router.post('/:id', (req, res) => {
-  res.send(`edit an expense page: ${req.params.id}`)
+router.put('/:id', (req, res) => {
+  Record.findOne({
+    where: {
+      Id: req.params.id
+    }
+  })
+    .then((record) => {
+      console.log('req.body')
+      console.log(req.body)
+      record.date = req.body.date
+      record.category = req.body.category
+      record.name = req.body.name
+      record.amount = parseFloat(req.body.record)
+      return record.save()
+    })
+    .then((recrod) => {
+      return res.redirect('/')
+    })
+    .catch((error) => {
+      return res.status(422).json(error)
+    })
 })
 
 // delete an expense
-router.post('/:id/delete', (req, res) => {
-  res.send(`delete an expense page: ${req.params.id}`)
+router.delete('/:id/delete', (req, res) => {
+  Record.destroy({
+    where: {
+      Id: req.params.id
+    }
+  })
+    .then(() => {
+      return res.redirect('/')
+    })
+    .catch((error) => {
+      return res.status(422).json(error)
+    })
 })
 
 module.exports = router

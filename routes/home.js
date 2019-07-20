@@ -1,11 +1,22 @@
 const express = require('express')
 const router = express.Router()
-// const db = require('./models')
+const db = require('../models')
 // const User = db.User
-// const Expense = db.Expense
+const Record = db.Record
 
 router.get('/', (req, res) => {
-  res.send('this is the home page')
+  Record.findAll({
+    order: [
+      ['date', 'DESC'],
+      ['name', 'ASC'],
+    ],
+  })
+    .then((records) => {
+      return res.render('index', { records: records })
+    })
+    .catch((error) => {
+      return res.status(422).json(error)
+    })
 })
 
 module.exports = router
