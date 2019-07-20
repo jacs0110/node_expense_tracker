@@ -8,12 +8,13 @@ const db = require('../models')
 
 // list all expenses
 router.get('/', (req, res) => {
-  res.send('list all expense')
+  // res.send('list all expense')
+  res.render('index')
 })
 
 // create an new expense page
 router.get('/new', (req, res) => {
-  res.send('create an new expense page')
+  res.render('new')
 })
 
 // show an expense page
@@ -28,7 +29,7 @@ router.post('/', (req, res) => {
 
 // edit an expense page
 router.get('/:id/edit', (req, res) => {
-  res.send(`edit an expense page: ${req.params.id}`)
+  res.render('edit')
 })
 
 // edit an expense (action)

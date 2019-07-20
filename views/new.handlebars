@@ -1,0 +1,17 @@
+<form action="/records" method="POST">
+  <div class="form-group mb-3">
+    <label>Date</label>
+    <input type="date" name="date" class="form-control" id="date" required>
+    <label>Category</label>
+    <input type="text" placeholder="category" name="category" class="form-control" required>
+    <label>Name</label>
+    <input type="text" placeholder="name" name="name" class="form-control" required>
+    <label>Amount</label>
+    <input type="number" placeholder="amount" name="record" class="form-control" min="0" required>
+  </div>
+  <button type="submit" class="btn btn-success">Create</button>
+</form>
+
+<script>
+  document.querySelector("#date").valueAsDate = new Date()
+</script>

@@ -7,7 +7,7 @@ const db = require('../models')
 
 // login
 router.get('/login', (req, res) => {
-  res.send('login')
+  res.render('login')
 })
 
 // login check
@@ -17,7 +17,7 @@ router.get('/login', (req, res, next) => {
 
 // register
 router.get('/register', (req, res) => {
-  res.send('register')
+  res.render('register')
 })
 
 // register check
@@ -28,7 +28,7 @@ router.get('/register', (req, res) => {
 // logout
 router.get('/logout', (req, res) => {
   req.logout()
-  res.send('logout')
+  res.redirect('/users/login')
 })
 
 module.exports = router

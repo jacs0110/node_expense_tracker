@@ -38,8 +38,8 @@ app.use(session({
 
 // routes
 app.use('/', require('./routes/home.js'))
-app.use('/users', require('./routes/users.js'))
-app.use('/expenses', require('./routes/expenses.js'))
+app.use('/users', require('./routes/user.js'))
+app.use('/records', require('./routes/record.js'))
 
 // listen to the express app
 app.listen(port, () => {
