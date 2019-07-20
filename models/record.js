@@ -6,8 +6,9 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     amount: DataTypes.FLOAT
   }, {});
-  Record.associate = function(models) {
+  Record.associate = function (models) {
     // associations can be defined here
+    Record.belongsTo(models.Category)
   };
   return Record;
 };

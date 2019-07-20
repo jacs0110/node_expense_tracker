@@ -1,21 +1,64 @@
-<a href="/records/new" class="btn btn-primary mb-3">Create</a>
-<ul class="list-group">
-  {{#each records}}
-  <li class="list-group-item">
-    <div class="row">
-      <div class="col-auto mr-auto">
-        <h4 style="display: inline;vertical-align: middle;"> {{this.category}} </h4>
-        <h4 style="display: inline;vertical-align: middle;"> {{this.name}} </h4>
-        <h4 style="display: inline;vertical-align: middle;"> {{this.date}} </h4>
-        <h4 style="display: inline;vertical-align: middle;"> {{this.amount}} </h4>
-      </div>
-      <div class="col-auto">
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col-sm">
+      <a href="/records/new" class="btn btn-primary mb-3">Create Record</a>
+    </div>
+    <div class="col-sm">
+      <a href="/categories" class="btn btn-primary mb-3">Manage Caregory</a>
+    </div>
+    <div class="col-sm">
+      <select class="custom-select">
+        <option selected>Sort by month</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+    </div>
+    <div class="col-sm">
+      <select class="custom-select">
+        <option selected>Sort by category</option>
+        {{#each categories}}
+        <option value="1">{{this.name}}</option>
+        {{/each}}
+      </select>
+    </div>
+  </div>
+</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Category</th>
+      <th scope="col">Name</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Edit</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each records}}
+    <tr>
+      <td>
+        <p style="display: inline;vertical-align: middle;"> {{this.date}} </p>
+      </td>
+      <td>
+        <p style="display: inline;vertical-align: middle;"> {{this.CategoryId}} </p>
+      </td>
+      <td>
+        <p style="display: inline;vertical-align: middle;"> {{this.name}} </p>
+      </td>
+      <td>
+        <p style="display: inline;vertical-align: middle;"> {{this.amount}} </p>
+      </td>
+      <td>
         <a href="/records/{{{this.id}}}/edit" class="btn btn-success">edit</a>
+      </td>
+      <td>
         <form action="/records/{{{this.id}}}/delete?_method=DELETE" method="post" style="display:inline">
           <button type="submit" class="btn btn-danger">delete</button>
         </form>
-      </div>
-    </div>
-  </li>
-  {{/each}}
-</ul>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

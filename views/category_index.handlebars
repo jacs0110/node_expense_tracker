@@ -1,0 +1,61 @@
+<div class="container">
+  {{#if category}}<h4><span class="badge badge-warning">Editing category: {{category.name}}</span></h4>{{/if}}
+  <form {{#if category}}action="/categories/{{{category.id}}}?_method=PUT" method="POST" {{else}}action="/categories"
+    method="POST" {{/if}}>
+    <div class="form-row align-items-center">
+      <div class="col-auto">
+        <input type="text" class="form-control" placeholder="name" name="name" {{#if category}}value="{{category.name}}"
+          {{/if}} required>
+      </div>
+      <div class="col-auto">
+        <input type="text" class="form-control" placeholder="icon" name="icon" {{#if category}}value="{{category.icon}}"
+          {{/if}} required>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-success">{{#if category}}Update{{else}}Create{{/if}}</button>
+      </div>
+      <div class="col-auto">
+        {{#if category}}
+        <a href="/categories" class="btn btn-primary">Return to category page</a>
+        {{else}}
+        <a href="/" class="btn btn-primary">Return to main page</a>
+        {{/if}}
+      </div>
+    </div>
+  </form>
+</div>
+{{#if categories}}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Img</th>
+      <th scope="col">Icon</th>
+      <th scope="col">Edit</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each categories}}
+    <tr>
+      <td>
+        <p style="display: inline;vertical-align: middle;"> {{this.name}} </p>
+      </td>
+      <td>
+        {{{this.icon}}}
+      </td>
+      <td>
+        <p style="display: inline;vertical-align: middle;"> {{this.icon}} </p>
+      </td>
+      <td>
+        <a href="/categories/{{{this.id}}}/edit" class="btn btn-success">edit</a>
+      </td>
+      <td>
+        <form action="/categories/{{{this.id}}}/delete?_method=DELETE" method="post" style="display:inline">
+          <button type="submit" class="btn btn-danger">delete</button>
+        </form>
+      </td>
+    </tr>
+    {{/each}}
+</table>
+{{/if}}

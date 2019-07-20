@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const db = require('../models')
 const Record = db.Record
+const Category = db.Category
 // const User = dn.User
 
 // auth
@@ -14,14 +15,23 @@ router.get('/', (req, res) => {
 
 // create an new expense page
 router.get('/new', (req, res) => {
-  res.render('new')
+  Category.findAll({
+    order: [
+      ['name', 'ASC'],
+    ],
+  })
+    .then((categories) => {
+      res.render('new', { categories: categories })
+    })
+
 })
 
 // create a new expense (action)
 router.post('/', (req, res) => {
+  console.log(req.body)
   Record.create({
     date: req.body.date,
-    category: req.body.category,
+    CategoryId: Number(req.body.category),
     name: req.body.name,
     amount: parseFloat(req.body.record),
   })
@@ -34,14 +44,23 @@ router.post('/', (req, res) => {
 })
 
 // edit an expense page
-router.get('/:id/edit', (req, res) => {
+router.get('/:id/edit', async (req, res) => {
+
+  let categories = await Category.findAll({
+    order: [
+      ['name', 'ASC'],
+    ],
+  });
+
   Record.findOne({
     where: {
       Id: req.params.id
     }
   })
     .then((record) => {
-      return res.render('edit', { record: record })
+      console.log(record.date)
+      let date = record.date.toISOString().split("T")[0]
+      return res.render('edit', { record: record, date: date, categories: categories })
     })
     .catch((error) => {
       return res.status(422).json(error)
@@ -59,7 +78,7 @@ router.put('/:id', (req, res) => {
       console.log('req.body')
       console.log(req.body)
       record.date = req.body.date
-      record.category = req.body.category
+      record.CategoryId = Number(req.body.category)
       record.name = req.body.name
       record.amount = parseFloat(req.body.record)
       return record.save()
