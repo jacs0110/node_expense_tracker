@@ -1,10 +1,10 @@
-<form action="/records/{{{record.id}}}?_method=PUT" method="POST">
+<form action="/records/{{{record.id}}}?_method=PUT" method="POST" id="updateRecord">
   <div class="form-group mb-3">
     <label>Date</label>
     <input type="date" name="date" class="form-control" id="date" value="{{{date}}}" required>
     <label>Category</label>
     <div class="col-sm">
-      <select name="category" form="newRecord" class="custom-select" required>
+      <select name="category" form="updateRecord" class="custom-select" required>
         <option selected>category</option>
         {{#each categories}}
         <option value={{this.id}}> {{this.name}}</option>

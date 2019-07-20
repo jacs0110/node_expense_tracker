@@ -7,6 +7,9 @@ const Category = db.Category
 
 router.get('/', async (req, res) => {
 
+  let test = await db.sequelize.query('SELECT Categories.name, Records.id, Records.date FROM Records JOIN Categories ON Records.CategoryId = Categories.id')
+  console.log(test[0])
+
   let categories = await Category.findAll({
     order: [
       ['name', 'ASC'],
@@ -20,9 +23,6 @@ router.get('/', async (req, res) => {
     ],
   })
     .then((records) => {
-      records.forEach((item) => {
-        console.log(item.name)
-      })
       return res.render('index', { records: records, categories: categories })
     })
     .catch((error) => {
