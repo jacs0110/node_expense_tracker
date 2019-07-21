@@ -9,7 +9,7 @@
       </div>
       <div class="col-auto">
         <input type="text" class="form-control" placeholder="icon" name="icon" {{#if category}}value="{{category.icon}}"
-          {{/if}} required>
+          {{/if}}>
       </div>
       <div class="col-auto">
         <button type="submit" class="btn btn-success">{{#if category}}Update{{else}}Create{{/if}}</button>
@@ -23,7 +23,10 @@
       </div>
     </div>
   </form>
+  <i>You can choose an icon for your category from <a href="https://fontawesome.com/icons?d=gallery"
+      target="_blank">here</a>, copy it's HTML and paste above in "icon"</i>
 </div>
+<br>
 {{#if categories}}
 <table class="table table-striped">
   <thead>

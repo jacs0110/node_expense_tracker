@@ -27,6 +27,7 @@
         {{/each}}
       </select>
     </div>
+    <br>
     <div class="col">
       <select class="custom-select" onchange="submit()" name="category">
         {{#if selectedCategory}}
@@ -46,9 +47,10 @@
     </div> --}}
   </div>
 </form>
+<br>
 <div class="col">
   {{#if totalAmount}}
-  <h5>Total Amount: <span class="badge badge-warning">{{totalAmount.sum}}</span></h5>
+  <h4>Total Amount: <span class="badge badge-warning">{{totalAmount.sum}}</span></h4>
   {{/if}}
 </div>
 <table class="table">

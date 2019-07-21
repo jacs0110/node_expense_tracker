@@ -28,9 +28,14 @@ router.get('/', authenticated, (req, res) => {
 // create a new category (action)
 router.post('/', authenticated, (req, res) => {
   console.log(req.body)
+  let newIcon
+  if (!req.body.icon) {
+    newIcon = '<i class="fas fa-pen"></i>'
+  }
+
   Category.create({
     categoryName: req.body.name,
-    icon: req.body.icon,
+    icon: newIcon,
     UserId: req.user.id
   })
     .then((category) => {
