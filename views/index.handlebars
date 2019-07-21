@@ -1,6 +1,9 @@
 <div class="container">
   <div class="d-flex justify-content-start">
     <div class="col">
+      <a href="/" class="btn btn-primary mb-3">Home</a>
+    </div>
+    <div class="col">
       <a href="/records/new" class="btn btn-primary mb-3">Create Record</a>
     </div>
     <div class="col">
@@ -11,19 +14,23 @@
 <form action="/sorts" method="GET">
   <div class="form-row">
     <div class="col">
-      <select class="form-control" id="exampleFormControlSelect2" name="alphabet" onchange="submit()">
-        <option value="null">please select</option>
-        <option value="a">a</option>
-        <option value="b">b</option>
-        <option value="c">c</option>
-        <option value="d">d</option>
-        <option value="e">e</option>
+      <select class="form-control" id="exampleFormControlSelect2" name="month" onchange="submit()">
+        {{#if selectedMonth}}
+        <option value={{selectedMonth}} selected>{{selectedMonth}}</option>
+        <option value="all"> --- </option>
+        <option value="all">All Time</option>
+        {{else}}
+        <option value="all">Select a month</option>
+        {{/if}}
+        {{#each monthList}}
+        <option value="{{this}}">{{this}}</option>
+        {{/each}}
       </select>
     </div>
     <div class="col">
       <select class="custom-select" onchange="submit()" name="category">
         {{#if selectedCategory}}
-        <option value="none" selected>{{selectedCategory.categoryName}}</option>
+        <option value="{{selectedCategory.id}}" selected>{{selectedCategory.categoryName}}</option>
         <option value="none"> --- </option>
         <option value="all">All Category</option>
         {{else}}
@@ -39,12 +46,17 @@
     </div> --}}
   </div>
 </form>
+<div class="col">
+  {{#if totalAmount}}
+  <h5>Total Amount: <span class="badge badge-warning">{{totalAmount.sum}}</span></h5>
+  {{/if}}
+</div>
 <table class="table">
   <thead>
     <tr>
       <th scope="col">Date</th>
-      <th scope="col">Category</th>
       <th scope="col">Name</th>
+      <th scope="col">Category</th>
       <th scope="col">Amount</th>
       <th scope="col">Edit</th>
       <th scope="col">Delete</th>
@@ -57,10 +69,10 @@
         <p style="display: inline;vertical-align: middle;"> {{this.date}} </p>
       </td>
       <td>
-        <p style="display: inline;vertical-align: middle;">{{{this.icon}}} &nbsp; {{this.categoryName}}</p>
+        <p style="display: inline;vertical-align: middle;"> {{this.name}} </p>
       </td>
       <td>
-        <p style="display: inline;vertical-align: middle;"> {{this.name}} </p>
+        <p style="display: inline;vertical-align: middle;">{{{this.icon}}} &nbsp; {{this.categoryName}}</p>
       </td>
       <td>
         <p style="display: inline;vertical-align: middle;"> {{this.amount}} </p>

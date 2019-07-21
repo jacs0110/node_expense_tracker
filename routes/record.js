@@ -28,7 +28,6 @@ router.get('/new', (req, res) => {
 
 // create a new expense (action)
 router.post('/', (req, res) => {
-  console.log(req.body)
   Record.create({
     date: req.body.date,
     CategoryId: Number(req.body.category),
@@ -73,8 +72,6 @@ router.put('/:id', (req, res) => {
     }
   })
     .then((record) => {
-      console.log('req.body')
-      console.log(req.body)
       record.date = req.body.date
       record.CategoryId = Number(req.body.category)
       record.name = req.body.name
