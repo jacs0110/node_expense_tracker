@@ -2,10 +2,17 @@ const express = require('express')
 const router = express.Router()
 const db = require('../models')
 const Category = db.Category
+const User = db.User
+
+// auth
+const { authenticated } = require('../config/auth')
 
 // get all categories
-router.get('/', (req, res) => {
+router.get('/', authenticated, (req, res) => {
   Category.findAll({
+    where: {
+      UserId: req.user.id
+    },
     order: [
       ['categoryName', 'ASC']
     ]
@@ -19,11 +26,12 @@ router.get('/', (req, res) => {
 })
 
 // create a new category (action)
-router.post('/', (req, res) => {
+router.post('/', authenticated, (req, res) => {
   console.log(req.body)
   Category.create({
     categoryName: req.body.name,
     icon: req.body.icon,
+    UserId: req.user.id
   })
     .then((category) => {
       return res.redirect('/categories')
@@ -34,10 +42,11 @@ router.post('/', (req, res) => {
 })
 
 // edit a category
-router.get('/:id/edit', (req, res) => {
+router.get('/:id/edit', authenticated, (req, res) => {
   Category.findOne({
     where: {
-      Id: req.params.id
+      Id: req.params.id,
+      UserId: req.user.id
     }
   })
     .then((category) => {
@@ -48,15 +57,17 @@ router.get('/:id/edit', (req, res) => {
     })
 })
 // edit a category (action)
-router.put('/:id', (req, res) => {
+router.put('/:id', authenticated, (req, res) => {
   Category.findOne({
     where: {
-      Id: req.params.id
+      Id: req.params.id,
+      UserId: req.user.id
     }
   })
     .then((category) => {
       category.categoryName = req.body.name
       category.icon = req.body.icon
+      category.UserId = req.user.id
       return category.save()
     })
     .then(() => {
@@ -65,10 +76,11 @@ router.put('/:id', (req, res) => {
 })
 
 // delete a category
-router.delete('/:id/delete', (req, res) => {
+router.delete('/:id/delete', authenticated, (req, res) => {
   Category.destroy({
     where: {
-      Id: req.params.id
+      Id: req.params.id,
+      UserId: req.user.id
     }
   })
     .then(() => {

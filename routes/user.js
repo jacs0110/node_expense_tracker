@@ -3,7 +3,7 @@ const router = express.Router()
 const passport = require('passport')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
-// const User = db.User
+const User = db.User
 
 // login
 router.get('/login', (req, res) => {
@@ -11,8 +11,11 @@ router.get('/login', (req, res) => {
 })
 
 // login check
-router.get('/login', (req, res, next) => {
-  res.send('login')
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/users/login',
+  })(req, res, next)
 })
 
 // register
@@ -21,8 +24,36 @@ router.get('/register', (req, res) => {
 })
 
 // register check
-router.get('/register', (req, res) => {
-  res.send('register')
+router.post('/register', (req, res) => {
+  const { name, email, password, password2 } = req.body
+  User.findOne({ where: { email: email } }).then(user => {
+    if (user) {
+      console.log('User already exists')
+      res.render('register', {
+        name,
+        password,
+        password2
+      })
+    } else if (password === password2) {
+      const newUser = new User({
+        name,
+        email,
+        password,
+      })
+      newUser
+        .save()
+        .then(user => {
+          res.redirect('/')
+        })
+        .catch(err => console.log(err))
+    } else {
+      console.log('Password inconsistent')
+      res.render('register', {
+        name,
+        email,
+      })
+    }
+  })
 })
 
 // logout

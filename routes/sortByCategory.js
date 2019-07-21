@@ -5,10 +5,16 @@ const db = require('../models')
 const Record = db.Record
 const Category = db.Category
 
-router.get('/', async (req, res) => {
+// auth
+const { authenticated } = require('../config/auth')
+
+router.get('/', authenticated, async (req, res) => {
   let queryCategory = ""
   let queryMonth = ""
   let selectedMonth = ""
+
+  let queryUser = `WHERE Records.UserId=${req.user.id}`
+  console.log(queryUser)
 
   // process query
   switch (req.query.category) {
@@ -19,7 +25,7 @@ router.get('/', async (req, res) => {
       queryCategory = ""
       break;
     default:
-      queryCategory = `WHERE Categories.id = ${req.query.category}`
+      queryCategory = `AND Categories.id = ${req.query.category}`
   }
 
   if (req.query.month == "all") {
@@ -33,17 +39,20 @@ router.get('/', async (req, res) => {
 
   try {
     // query records
-    let rawRecords = await db.sequelize.query(`SELECT Records.id,Records.date,Records.name,Records.amount,Records.CategoryId, Categories.categoryName,Categories.icon FROM Records JOIN Categories ON Records.CategoryId = Categories.id ${queryCategory} ${queryMonth} ORDER BY Records.date DESC`)
+    let rawRecords = await db.sequelize.query(`SELECT Records.id,Records.date,Records.name,Records.amount,Records.CategoryId, Categories.categoryName,Categories.icon FROM Records JOIN Categories ON Records.CategoryId = Categories.id ${queryUser} ${queryCategory} ${queryMonth}  ORDER BY Records.date DESC`)
 
     rawRecords[0].forEach(element => {
       element.date = element.date.toISOString().split("T")[0]
     });
 
     // query total amounts
-    let totalAmount = await db.sequelize.query(`SELECT SUM(Records.amount) as sum FROM Records JOIN Categories ON Records.CategoryId = Categories.id ${queryCategory} ${queryMonth}`)
+    let totalAmount = await db.sequelize.query(`SELECT SUM(Records.amount) as sum FROM Records JOIN Categories ON Records.CategoryId = Categories.id ${queryUser} ${queryCategory} ${queryMonth}`)
 
     // query category list
     let categoryList = await Category.findAll({
+      where: {
+        UserId: req.user.id
+      },
       order: [
         ['categoryName', 'ASC'],
       ],
@@ -51,12 +60,13 @@ router.get('/', async (req, res) => {
 
     let selectedCategory = await Category.findAll({
       where: {
-        Id: req.query.category
+        Id: req.query.category,
+        UserId: req.user.id
       }
     })
 
     //query month list
-    let rawMonths = await db.sequelize.query('SELECT Records.date FROM Records GROUP BY Records.date ORDER BY Records.date DESC')
+    let rawMonths = await db.sequelize.query(`SELECT Records.date FROM Records ${queryUser} GROUP BY Records.date ORDER BY Records.date DESC`)
 
     rawMonths[0].forEach(element => {
       let year = element.date.toISOString().split("-")[0]

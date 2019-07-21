@@ -3,19 +3,23 @@ const router = express.Router()
 const db = require('../models')
 const Record = db.Record
 const Category = db.Category
-// const User = dn.User
+const User = db.User
 
 // auth
+const { authenticated } = require('../config/auth')
 
 // list all expenses
-router.get('/', (req, res) => {
+router.get('/', authenticated, (req, res) => {
   // res.send('list all expense')
   res.render('index')
 })
 
 // create an new expense page
-router.get('/new', (req, res) => {
+router.get('/new', authenticated, (req, res) => {
   Category.findAll({
+    where: {
+      UserId: req.user.id
+    },
     order: [
       ['categoryName', 'ASC'],
     ],
@@ -27,12 +31,13 @@ router.get('/new', (req, res) => {
 })
 
 // create a new expense (action)
-router.post('/', (req, res) => {
+router.post('/', authenticated, (req, res) => {
   Record.create({
     date: req.body.date,
     CategoryId: Number(req.body.category),
     name: req.body.name,
     amount: parseFloat(req.body.record),
+    UserId: req.user.id
   })
     .then((record) => {
       return res.redirect('/')
@@ -43,16 +48,20 @@ router.post('/', (req, res) => {
 })
 
 // edit an expense page
-router.get('/:id/edit', async (req, res) => {
+router.get('/:id/edit', authenticated, async (req, res) => {
 
   let categoryList = await Category.findAll({
+    where: {
+      UserId: req.user.id
+    },
     order: [
       ['categoryName', 'ASC'],
     ],
   })
   Record.findOne({
     where: {
-      Id: Number(req.params.id)
+      Id: Number(req.params.id),
+      UserId: req.user.id
     }
   })
     .then((record) => {
@@ -65,10 +74,11 @@ router.get('/:id/edit', async (req, res) => {
 })
 
 // edit an expense (action)
-router.put('/:id', (req, res) => {
+router.put('/:id', authenticated, (req, res) => {
   Record.findOne({
     where: {
-      Id: req.params.id
+      Id: req.params.id,
+      UserId: req.user.id
     }
   })
     .then((record) => {
@@ -76,6 +86,7 @@ router.put('/:id', (req, res) => {
       record.CategoryId = Number(req.body.category)
       record.name = req.body.name
       record.amount = parseFloat(req.body.record)
+      record.UserId = req.user.id
       return record.save()
     })
     .then((recrod) => {
@@ -87,10 +98,11 @@ router.put('/:id', (req, res) => {
 })
 
 // delete an expense
-router.delete('/:id/delete', (req, res) => {
+router.delete('/:id/delete', authenticated, (req, res) => {
   Record.destroy({
     where: {
-      Id: req.params.id
+      Id: req.params.id,
+      UserId: req.user.id
     }
   })
     .then(() => {

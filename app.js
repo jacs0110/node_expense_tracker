@@ -31,11 +31,16 @@ app.use(session({
 }))
 
 // use passport
-// app.use(passport.initialize())
-// app.use(passport.session())
-// require('./config/passport')(passport)
+app.use(passport.initialize())
+app.use(passport.session())
+
+require('./config/passport')(passport)
 
 // locals
+app.use((req, res, next) => {
+  res.locals.user = req.user
+  next()
+})
 
 // routes
 app.use('/', require('./routes/home.js'))
