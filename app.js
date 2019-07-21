@@ -6,6 +6,7 @@ const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
 const session = require('express-session')
 const passport = require('passport')
+const flash = require('connect-flash')
 const port = 3000
 
 if (process.env.NODE_ENV !== 'production') {
@@ -26,6 +27,7 @@ app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(flash())
 
 // use express session
 app.use(session({
@@ -43,6 +45,9 @@ require('./config/passport')(passport)
 // locals
 app.use((req, res, next) => {
   res.locals.user = req.user
+  res.locals.success_msg = req.flash('success_msg')
+  res.locals.warning_msg = req.flash('warning_msg')
+  res.locals.isAuthenticated = req.isAuthenticated()
   next()
 })
 
