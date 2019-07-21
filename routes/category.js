@@ -55,8 +55,6 @@ router.put('/:id', (req, res) => {
     }
   })
     .then((category) => {
-      console.log('req.body')
-      console.log(req.body)
       category.categoryName = req.body.name
       category.icon = req.body.icon
       return category.save()

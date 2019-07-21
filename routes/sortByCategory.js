@@ -5,10 +5,24 @@ const db = require('../models')
 const Record = db.Record
 const Category = db.Category
 
-router.get('/:id', async (req, res) => {
+router.get('/', async (req, res) => {
+  console.log('req.params')
+  console.log(req.query.category)
+  let query = ""
+
+  switch (req.query.category) {
+    case 'all':
+      query = ""
+      break;
+    case 'none':
+      query = ""
+      break;
+    default:
+      query = `WHERE Categories.id = ${req.query.category}`
+  }
 
   try {
-    let rawRecords = await db.sequelize.query(`SELECT Records.id,Records.date,Records.name,Records.amount,Records.CategoryId, Categories.categoryName,Categories.icon FROM Records JOIN Categories ON Records.CategoryId = Categories.id WHERE Categories.id = ${req.params.id} ORDER BY Records.date DESC`)
+    let rawRecords = await db.sequelize.query(`SELECT Records.id,Records.date,Records.name,Records.amount,Records.CategoryId, Categories.categoryName,Categories.icon FROM Records JOIN Categories ON Records.CategoryId = Categories.id ${query} ORDER BY Records.date DESC`)
 
     rawRecords[0].forEach(element => {
       element.date = element.date.toISOString().split("T")[0]
@@ -22,7 +36,7 @@ router.get('/:id', async (req, res) => {
 
     let selectedCategory = await Category.findAll({
       where: {
-        Id: req.params.id
+        Id: req.query.category
       }
     })
     console.log('selectedCategory')
