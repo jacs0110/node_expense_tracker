@@ -8,6 +8,10 @@ const session = require('express-session')
 const passport = require('passport')
 const port = 3000
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
 // include static files
 app.use(express.static('public'))
 
@@ -48,6 +52,7 @@ app.use('/users', require('./routes/user.js'))
 app.use('/records', require('./routes/record.js'))
 app.use('/sorts', require('./routes/sortByCategory.js'))
 app.use('/categories', require('./routes/category.js'))
+app.use('/auth', require('./routes/auth.js'))
 
 // listen to the express app
 app.listen(port, () => {
