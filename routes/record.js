@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 router.get('/new', (req, res) => {
   Category.findAll({
     order: [
-      ['name', 'ASC'],
+      ['categoryName', 'ASC'],
     ],
   })
     .then((categories) => {
@@ -46,21 +46,21 @@ router.post('/', (req, res) => {
 // edit an expense page
 router.get('/:id/edit', async (req, res) => {
 
-  let categories = await Category.findAll({
+  let categoryList = await Category.findAll({
     order: [
-      ['name', 'ASC'],
+      ['categoryName', 'ASC'],
     ],
-  });
-
+  })
+  console.log('categoryList')
+  console.log(categoryList)
   Record.findOne({
     where: {
-      Id: req.params.id
+      Id: Number(req.params.id)
     }
   })
     .then((record) => {
-      console.log(record.date)
       let date = record.date.toISOString().split("T")[0]
-      return res.render('edit', { record: record, date: date, categories: categories })
+      return res.render('edit', { record: record, date: date, categories: categoryList })
     })
     .catch((error) => {
       return res.status(422).json(error)

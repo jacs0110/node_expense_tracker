@@ -1,11 +1,11 @@
 <div class="container">
-  {{#if category}}<h4><span class="badge badge-warning">Editing category: {{category.name}}</span></h4>{{/if}}
+  {{#if category}}<h5>Editing category: <span class="badge badge-warning">{{category.categoryName}}</span></h5>{{/if}}
   <form {{#if category}}action="/categories/{{{category.id}}}?_method=PUT" method="POST" {{else}}action="/categories"
     method="POST" {{/if}}>
     <div class="form-row align-items-center">
       <div class="col-auto">
-        <input type="text" class="form-control" placeholder="name" name="name" {{#if category}}value="{{category.name}}"
-          {{/if}} required>
+        <input type="text" class="form-control" placeholder="name" name="name"
+          {{#if category}}value="{{category.categoryName}}" {{/if}} required>
       </div>
       <div class="col-auto">
         <input type="text" class="form-control" placeholder="icon" name="icon" {{#if category}}value="{{category.icon}}"
@@ -30,7 +30,7 @@
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Img</th>
-      <th scope="col">Icon</th>
+      <th scope="col">Icon HTML</th>
       <th scope="col">Edit</th>
       <th scope="col">Delete</th>
     </tr>
@@ -39,7 +39,7 @@
     {{#each categories}}
     <tr>
       <td>
-        <p style="display: inline;vertical-align: middle;"> {{this.name}} </p>
+        <p style="display: inline;vertical-align: middle;"> {{this.categoryName}} </p>
       </td>
       <td>
         {{{this.icon}}}

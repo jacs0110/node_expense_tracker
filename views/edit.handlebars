@@ -7,7 +7,7 @@
       <select name="category" form="updateRecord" class="custom-select" required>
         <option selected>category</option>
         {{#each categories}}
-        <option value={{this.id}}> {{this.name}}</option>
+        <option value={{this.id}}> {{this.categoryName}}</option>
         {{/each}}
       </select>
     </div>
@@ -18,4 +18,5 @@
       value="{{{record.amount}}}" required>
   </div>
   <button type="submit" class="btn btn-success">Update</button>
+  <a href="/" class="btn btn-primary">Return to main page</a>
 </form>

@@ -7,7 +7,7 @@ const Category = db.Category
 router.get('/', (req, res) => {
   Category.findAll({
     order: [
-      ['name', 'ASC']
+      ['categoryName', 'ASC']
     ]
   })
     .then((categories) => {
@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
   console.log(req.body)
   Category.create({
-    name: req.body.name,
+    categoryName: req.body.name,
     icon: req.body.icon,
   })
     .then((category) => {
@@ -57,7 +57,7 @@ router.put('/:id', (req, res) => {
     .then((category) => {
       console.log('req.body')
       console.log(req.body)
-      category.name = req.body.name
+      category.categoryName = req.body.name
       category.icon = req.body.icon
       return category.save()
     })

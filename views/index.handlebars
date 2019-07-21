@@ -17,8 +17,8 @@
     <div class="col-sm">
       <select class="custom-select">
         <option selected>Sort by category</option>
-        {{#each categories}}
-        <option value="1">{{this.name}}</option>
+        {{#each categoryList}}
+        <option value="1">{{this.categoryName}}</option>
         {{/each}}
       </select>
     </div>
@@ -42,7 +42,7 @@
         <p style="display: inline;vertical-align: middle;"> {{this.date}} </p>
       </td>
       <td>
-        <p style="display: inline;vertical-align: middle;"> {{this.CategoryId}} </p>
+        <p style="display: inline;vertical-align: middle;">{{{this.icon}}} &nbsp; {{this.categoryName}}</p>
       </td>
       <td>
         <p style="display: inline;vertical-align: middle;"> {{this.name}} </p>
