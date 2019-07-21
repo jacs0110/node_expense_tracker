@@ -51,8 +51,6 @@ router.get('/:id/edit', async (req, res) => {
       ['categoryName', 'ASC'],
     ],
   })
-  console.log('categoryList')
-  console.log(categoryList)
   Record.findOne({
     where: {
       Id: Number(req.params.id)

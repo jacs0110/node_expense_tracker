@@ -8,7 +8,7 @@ const Category = db.Category
 router.get('/', async (req, res) => {
 
   try {
-    let rawRecords = await db.sequelize.query('SELECT Records.id,Records.date,Records.name,Records.amount,Records.CategoryId, Categories.categoryName FROM Records JOIN Categories ON Records.CategoryId = Categories.id ORDER BY Records.date DESC')
+    let rawRecords = await db.sequelize.query('SELECT Records.id,Records.date,Records.name,Records.amount,Records.CategoryId, Categories.categoryName,Categories.icon FROM Records JOIN Categories ON Records.CategoryId = Categories.id ORDER BY Records.date DESC')
 
     rawRecords[0].forEach(element => {
       element.date = element.date.toISOString().split("T")[0]

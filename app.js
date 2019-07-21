@@ -41,7 +41,7 @@ app.use(session({
 app.use('/', require('./routes/home.js'))
 app.use('/users', require('./routes/user.js'))
 app.use('/records', require('./routes/record.js'))
-// app.use('/sorts', require('./routes/sort.js'))
+app.use('/sorts', require('./routes/sortByCategory.js'))
 app.use('/categories', require('./routes/category.js'))
 
 // listen to the express app

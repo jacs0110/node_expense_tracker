@@ -15,10 +15,15 @@
       </select>
     </div>
     <div class="col-sm">
-      <select class="custom-select">
-        <option selected>Sort by category</option>
+      <select class="custom-select" onchange="location = this.value">
+        {{#if selectedCategory}}
+        <option value="" selected>{{selectedCategory.categoryName}}</option>
+        <option value="/">All Category</option>
+        {{else}}
+        <option value="/">Select a category</option>
+        {{/if}}
         {{#each categoryList}}
-        <option value="1">{{this.categoryName}}</option>
+        <option value="/sorts/{{this.id}}">{{this.categoryName}}</option>
         {{/each}}
       </select>
     </div>
