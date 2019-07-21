@@ -5,7 +5,7 @@
     <label>Category</label>
     <div class="col-sm">
       <select name="category" form="updateRecord" class="custom-select" required>
-        <option selected>category</option>
+        {{!-- <option selected>category</option> --}}
         {{#each categories}}
         <option value={{this.id}}> {{this.categoryName}}</option>
         {{/each}}
