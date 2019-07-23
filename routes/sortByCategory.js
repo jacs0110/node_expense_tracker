@@ -13,7 +13,7 @@ router.get('/', authenticated, async (req, res) => {
   let queryMonth = ""
   let selectedMonth = ""
 
-  let queryUser = `WHERE Records.UserId=${req.user.id}`
+  let queryUser = `WHERE "Records"."UserId"=${req.user.id}`
   console.log(queryUser)
 
   // process query
@@ -25,7 +25,7 @@ router.get('/', authenticated, async (req, res) => {
       queryCategory = ""
       break;
     default:
-      queryCategory = `AND Categories.id = ${req.query.category}`
+      queryCategory = `AND "Categories"."id" = ${req.query.category}`
   }
 
   if (req.query.month == "all") {
@@ -33,20 +33,20 @@ router.get('/', authenticated, async (req, res) => {
   } else {
     let year = req.query.month.split('-')[0]
     let month = req.query.month.split('-')[1]
-    queryMonth = `AND year(Records.date)=${year} AND month(Records.date)=${month}`
+    queryMonth = `AND year("Records"."date")=${year} AND month("Records"."date")=${month}`
     selectedMonth = `${year}-${month}`
   }
 
   try {
     // query records
-    let rawRecords = await db.sequelize.query(`SELECT Records.id,Records.date,Records.name,Records.amount,Records.CategoryId, Categories.categoryName,Categories.icon FROM Records JOIN Categories ON Records.CategoryId = Categories.id ${queryUser} ${queryCategory} ${queryMonth}  ORDER BY Records.date DESC`)
+    let rawRecords = await db.sequelize.query(`SELECT "Records"."id","Records"."date","Records"."name","Records"."amount","Records"."CategoryId", "Categories"."categoryName","Categories"."icon" FROM "Records" JOIN "Categories" ON "Records"."CategoryId" = "Categories"."id" ${queryUser} ${queryCategory} ${queryMonth}  ORDER BY "Records"."date" DESC`)
 
     rawRecords[0].forEach(element => {
       element.date = element.date.toISOString().split("T")[0]
     });
 
     // query total amounts
-    let totalAmount = await db.sequelize.query(`SELECT SUM(Records.amount) as sum FROM Records JOIN Categories ON Records.CategoryId = Categories.id ${queryUser} ${queryCategory} ${queryMonth}`)
+    let totalAmount = await db.sequelize.query(`SELECT SUM("Records"."amount") as "sum" FROM "Records" JOIN "Categories" ON "Records"."CategoryId" = "Categories"."id" ${queryUser} ${queryCategory} ${queryMonth}`)
 
     // query category list
     let categoryList = await Category.findAll({
@@ -66,7 +66,7 @@ router.get('/', authenticated, async (req, res) => {
     })
 
     //query month list
-    let rawMonths = await db.sequelize.query(`SELECT Records.date FROM Records ${queryUser} GROUP BY Records.date ORDER BY Records.date DESC`)
+    let rawMonths = await db.sequelize.query(`SELECT "Records"."date" FROM "Records" ${queryUser} GROUP BY "Records"."date" ORDER BY "Records"."date" DESC`)
 
     rawMonths[0].forEach(element => {
       let year = element.date.toISOString().split("-")[0]

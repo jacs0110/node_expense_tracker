@@ -29,7 +29,7 @@ router.post('/', authenticated, (req, res) => {
 
   Category.create({
     categoryName: req.body.name,
-    icon: newIcon,
+    icon: req.body.icon,
     UserId: req.user.id
   })
     .then((category) => {
@@ -78,10 +78,10 @@ router.put('/:id', authenticated, (req, res) => {
 // delete a category
 router.delete('/:id/delete', authenticated, async (req, res) => {
 
-  let queryUser = `WHERE Records.UserId=${req.user.id}`
-  let queryCategory = `AND Categories.id=${req.params.id}`
+  let queryUser = `WHERE "Records"."UserId"=${req.user.id}`
+  let queryCategory = `AND "Categories"."id"=${req.params.id}`
 
-  let counts = await db.sequelize.query(`SELECT Categories.id,COUNT(Records.name) as count FROM Records JOIN Categories ON Records.CategoryId = Categories.id ${queryUser} ${queryCategory} GROUP BY Categories.id`)
+  let counts = await db.sequelize.query(`SELECT "Categories"."id",COUNT("Records"."name") as "count" FROM "Records" JOIN "Categories" ON "Records"."CategoryId" = "Categories"."id" ${queryUser} ${queryCategory} GROUP BY "Categories"."id"`)
 
   if (typeof (counts[0][0]) == "undefined") {
     Category.destroy({
