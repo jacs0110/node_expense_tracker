@@ -8,21 +8,15 @@ const User = db.User
 const { authenticated } = require('../config/auth')
 
 // get all categories
-router.get('/', authenticated, (req, res) => {
-  Category.findAll({
-    where: {
-      UserId: req.user.id
-    },
+router.get('/', authenticated, async (req, res) => {
+
+  let categories = await Category.findAll({
+    where: { UserId: req.user.id },
     order: [
-      ['categoryName', 'ASC']
-    ]
+      ['categoryName', 'ASC'],
+    ],
   })
-    .then((categories) => {
-      return res.render('category_index', { categories: categories })
-    })
-    .catch((error) => {
-      return res.status(422).json(error)
-    })
+  return res.render('category_index', { categories: categories })
 })
 
 // create a new category (action)
@@ -39,6 +33,7 @@ router.post('/', authenticated, (req, res) => {
     UserId: req.user.id
   })
     .then((category) => {
+      req.flash('success_msg', `You created a new category successfully!`)
       return res.redirect('/categories')
     })
     .catch((error) => {
@@ -81,18 +76,30 @@ router.put('/:id', authenticated, (req, res) => {
 })
 
 // delete a category
-router.delete('/:id/delete', authenticated, (req, res) => {
-  Category.destroy({
-    where: {
-      Id: req.params.id,
-      UserId: req.user.id
-    }
-  })
-    .then(() => {
-      return res.redirect('/categories')
+router.delete('/:id/delete', authenticated, async (req, res) => {
+
+  let queryUser = `WHERE Records.UserId=${req.user.id}`
+  let queryCategory = `AND Categories.id=${req.params.id}`
+
+  let counts = await db.sequelize.query(`SELECT Categories.id,COUNT(Records.name) as count FROM Records JOIN Categories ON Records.CategoryId = Categories.id ${queryUser} ${queryCategory} GROUP BY Categories.id`)
+
+  if (typeof (counts[0][0]) == "undefined") {
+    Category.destroy({
+      where: {
+        Id: req.params.id,
+        UserId: req.user.id
+      }
     })
-    .catch((error) => {
-      return res.status(422).json(error)
-    })
+      .then(() => {
+        req.flash('success_msg', `You deleted a category successfully!`)
+        return res.redirect('/categories')
+      })
+      .catch((error) => {
+        return res.status(422).json(error)
+      })
+  } else {
+    req.flash('warning_msg', `You can't delete this category because there are ${counts[0][0].count} record in it!`)
+    return res.redirect('/categories')
+  }
 })
 module.exports = router

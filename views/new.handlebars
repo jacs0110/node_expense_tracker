@@ -4,18 +4,24 @@
     <input type="date" name="date" class="form-control" id="date" required>
     <label>Category</label>
     <div class="col-sm">
-      <select name="category" form="newRecord" class="custom-select">
+      {{#if categories}}
+      <select name="category" form="newRecord" class="custom-select" required>
         {{#each categories}}
         <option value={{this.id}}>{{this.categoryName}}</option>
         {{/each}}
       </select>
+      {{else}}
+      <a href="/categories" class="btn btn-outline-danger mb-3">Please create a category first</a>
+      {{/if}}
     </div>
     <label>Name</label>
     <input type="text" placeholder="name" name="name" class="form-control" required>
     <label>Amount</label>
     <input type="number" placeholder="amount" name="record" class="form-control" min="0" step="any" required>
   </div>
+  {{#if categories}}
   <button type="submit" class="btn btn-success">Create</button>
+  {{/if}}
 </form>
 <a href="/" class="btn btn-primary mb-3">Home</a>
 

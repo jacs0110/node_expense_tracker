@@ -8,6 +8,7 @@ const session = require('express-session')
 const passport = require('passport')
 const flash = require('connect-flash')
 const port = 3000
+const handlebarHelpers = require('./handlebars-helpers')
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
