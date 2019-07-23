@@ -8,8 +8,12 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Record.associate = function (models) {
     // associations can be defined here
-    Record.belongsTo(models.Category)
-    Record.belongsTo(models.User)
+    Record.belongsTo(models.Category, {
+      foreignKey: 'CategoryId',
+    });
+    Record.belongsTo(models.User, {
+      foreignKey: 'UserId',
+    });
   };
   return Record;
 };
