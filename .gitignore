@@ -2,6 +2,6 @@
 .DS_Store
 .env
 /sampleCode.js
+/handlebars-helpers.js
 /pieChart.js
 /d3pie.min.js
-/handlebars-helpers.js
