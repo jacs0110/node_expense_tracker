@@ -8,10 +8,10 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function (models) {
     User.hasMany(models.Record, {
       foreignKey: 'UserId',
-    });)
+    });
     User.hasMany(models.Category, {
       foreignKey: 'UserId',
-    });)
+    });
   };
   return User;
 };

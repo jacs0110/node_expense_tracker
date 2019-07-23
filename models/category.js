@@ -8,10 +8,10 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Category.hasMany(models.Record, {
       foreignKey: 'CategoryId',
-    });)
+    });
     Category.belongsTo(models.User, {
       foreignKey: 'UserId',
-    });)
+    });
   };
   return Category;
 };
