@@ -60,7 +60,7 @@ router.get('/:id/edit', authenticated, async (req, res) => {
   })
   Record.findOne({
     where: {
-      RecordId: Number(req.params.id),
+      id: Number(req.params.id),
       UserId: req.user.id
     }
   })
@@ -77,7 +77,7 @@ router.get('/:id/edit', authenticated, async (req, res) => {
 router.put('/:id', authenticated, (req, res) => {
   Record.findOne({
     where: {
-      RecordId: req.params.id,
+      id: req.params.id,
       UserId: req.user.id
     }
   })
@@ -101,7 +101,7 @@ router.put('/:id', authenticated, (req, res) => {
 router.delete('/:id/delete', authenticated, (req, res) => {
   Record.destroy({
     where: {
-      RecordId: req.params.id,
+      id: req.params.id,
       UserId: req.user.id
     }
   })

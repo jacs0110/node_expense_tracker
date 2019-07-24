@@ -60,7 +60,7 @@ router.get('/', authenticated, async (req, res) => {
 
     let selectedCategory = await Category.findAll({
       where: {
-        Id: req.query.category,
+        id: req.query.category,
         UserId: req.user.id
       }
     })

@@ -88,7 +88,7 @@ router.delete('/:id/delete', authenticated, async (req, res) => {
   if (typeof (counts[0][0]) == "undefined") {
     Category.destroy({
       where: {
-        Id: req.params.id,
+        id: req.params.id,
         UserId: req.user.id
       }
     })
