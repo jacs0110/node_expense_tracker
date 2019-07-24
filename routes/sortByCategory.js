@@ -22,12 +22,15 @@ router.get('/', authenticated, async (req, res) => {
     if (req.query.category.toString() == "all") {
       queryCategory = ""
       console.log(`ALL: ${new Date()}`)
+      console.log(`queryCategory: ${queryCategory}`)
     } else if (req.query.category.toString() == "none") {
       queryCategory = ""
       console.log(`NONE: ${new Date()}`)
+      console.log(`queryCategory: ${queryCategory}`)
     } else {
       queryCategory = `AND "Categories"."id" = ${req.query.category}`
       console.log(`REST: ${new Date()}`)
+      console.log(`queryCategory: ${queryCategory}`)
     }
 
     if (req.query.month == "all") {
@@ -40,6 +43,7 @@ router.get('/', authenticated, async (req, res) => {
     }
 
     // query records
+    console.log(`AFTER queryCategory: ${queryCategory}`)
     let rawRecords = await db.sequelize.query(`SELECT "Records"."id","Records"."date","Records"."name","Records"."amount","Records"."CategoryId", "Categories"."categoryName","Categories"."icon" FROM "Records" JOIN "Categories" ON "Records"."CategoryId" = "Categories"."id" ${queryUser} ${queryCategory} ${queryMonth}  ORDER BY "Records"."date" DESC`)
 
     rawRecords[0].forEach(element => {
