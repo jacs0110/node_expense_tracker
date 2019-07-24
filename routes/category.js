@@ -25,11 +25,13 @@ router.post('/', authenticated, (req, res) => {
   let newIcon
   if (!req.body.icon) {
     newIcon = '<i class="fas fa-pen"></i>'
+  } else {
+    newIcon = req.body.icon
   }
 
   Category.create({
     categoryName: req.body.name,
-    icon: req.body.icon,
+    icon: newIcon,
     UserId: req.user.id
   })
     .then((category) => {
