@@ -47,7 +47,7 @@ router.post('/', authenticated, (req, res) => {
 router.get('/:id/edit', authenticated, (req, res) => {
   Category.findOne({
     where: {
-      Id: req.params.id,
+      CategoryId: req.params.id,
       UserId: req.user.id
     }
   })
@@ -62,7 +62,7 @@ router.get('/:id/edit', authenticated, (req, res) => {
 router.put('/:id', authenticated, (req, res) => {
   Category.findOne({
     where: {
-      Id: req.params.id,
+      CategoryId: req.params.id,
       UserId: req.user.id
     }
   })
