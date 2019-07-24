@@ -19,10 +19,10 @@ router.get('/', authenticated, async (req, res) => {
     console.log(req.query)
     console.log(req.query.category.toString() == 'all')
 
-    if (req.query.category.toString() == 'all') {
+    if (req.query.category.toString() == "all") {
       queryCategory = ""
       console.log(`ALL: ${new Date()}`)
-    } else if (req.query.category.toString() == 'none') {
+    } else if (req.query.category.toString() == "none") {
       queryCategory = ""
       console.log(`NONE: ${new Date()}`)
     } else {
@@ -33,8 +33,8 @@ router.get('/', authenticated, async (req, res) => {
     if (req.query.month == "all") {
       queryMonth = ""
     } else {
-      let year = req.query.month.split('-')[0]
-      let month = req.query.month.split('-')[1]
+      let year = Number(req.query.month.split('-')[0])
+      let month = Number(req.query.month.split('-')[1])
       queryMonth = `AND year("Records"."date")=${year} AND month("Records"."date")=${month}`
       selectedMonth = `${year}-${month}`
     }
