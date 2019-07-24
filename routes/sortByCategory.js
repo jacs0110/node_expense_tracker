@@ -28,8 +28,9 @@ router.get('/', authenticated, async (req, res) => {
   //     queryCategory = `AND "Categories"."id" = ${req.query.category}`
   // }
   console.log(req.query)
+  console.log(typeof req.query.category)
 
-  if (req.query.category !== 'all' && req.query.category !== 'none') {
+  if (req.query.category.toString() !== 'all' && req.query.category.toString() !== 'none') {
     queryCategory = `AND "Categories"."id" = ${req.query.category}`
   } else {
     queryCategory = ""
