@@ -28,12 +28,14 @@ router.get('/', authenticated, async (req, res) => {
   //     queryCategory = `AND "Categories"."id" = ${req.query.category}`
   // }
   console.log(req.query)
-  console.log(typeof req.query.category)
+  console.log(req.query.category.toString() == 'all')
 
-  if (req.query.category.toString() !== 'all' && req.query.category.toString() !== 'none') {
-    queryCategory = `AND "Categories"."id" = ${req.query.category}`
-  } else {
+  if (req.query.category.toString() == 'all') {
     queryCategory = ""
+  } else if (req.query.category.toString() == 'none') {
+    queryCategory = ""
+  } else {
+    queryCategory = `AND "Categories"."id" = ${req.query.category}`
   }
 
   if (req.query.month == "all") {
