@@ -17,11 +17,11 @@ router.get('/', authenticated, async (req, res) => {
   console.log(queryUser)
 
   // process query
-  switch (req.query.category) {
-    case 'all':
+  switch (req.query.category.toString()) {
+    case "all":
       queryCategory = ""
       break;
-    case 'none':
+    case "none":
       queryCategory = ""
       break;
     default:
