@@ -9,45 +9,36 @@ const Category = db.Category
 const { authenticated } = require('../config/auth')
 
 router.get('/', authenticated, async (req, res) => {
-  let queryCategory = ""
-  let queryMonth = ""
-  let selectedMonth = ""
-
-  let queryUser = `WHERE "Records"."UserId"=${req.user.id}`
-  console.log(queryUser)
-
-  // process query
-  // switch (req.query.category.toString()) {
-  //   case "all":
-  //     queryCategory = ""
-  //     break;
-  //   case "none":
-  //     queryCategory = ""
-  //     break;
-  //   default:
-  //     queryCategory = `AND "Categories"."id" = ${req.query.category}`
-  // }
-  console.log(req.query)
-  console.log(req.query.category.toString() == 'all')
-
-  if (req.query.category.toString() == 'all') {
-    queryCategory = ""
-  } else if (req.query.category.toString() == 'none') {
-    queryCategory = ""
-  } else {
-    queryCategory = `AND "Categories"."id" = ${req.query.category}`
-  }
-
-  if (req.query.month == "all") {
-    queryMonth = ""
-  } else {
-    let year = req.query.month.split('-')[0]
-    let month = req.query.month.split('-')[1]
-    queryMonth = `AND year("Records"."date")=${year} AND month("Records"."date")=${month}`
-    selectedMonth = `${year}-${month}`
-  }
-
   try {
+    let queryCategory = ""
+    let queryMonth = ""
+    let selectedMonth = ""
+    let queryUser = `WHERE "Records"."UserId"=${req.user.id}`
+
+    console.log(queryUser)
+    console.log(req.query)
+    console.log(req.query.category.toString() == 'all')
+
+    if (req.query.category.toString() == 'all') {
+      queryCategory = ""
+      console.log(`ALL: ${new Date()}`)
+    } else if (req.query.category.toString() == 'none') {
+      queryCategory = ""
+      console.log(`NONE: ${new Date()}`)
+    } else {
+      queryCategory = `AND "Categories"."id" = ${req.query.category}`
+      console.log(`REST: ${new Date()}`)
+    }
+
+    if (req.query.month == "all") {
+      queryMonth = ""
+    } else {
+      let year = req.query.month.split('-')[0]
+      let month = req.query.month.split('-')[1]
+      queryMonth = `AND year("Records"."date")=${year} AND month("Records"."date")=${month}`
+      selectedMonth = `${year}-${month}`
+    }
+
     // query records
     let rawRecords = await db.sequelize.query(`SELECT "Records"."id","Records"."date","Records"."name","Records"."amount","Records"."CategoryId", "Categories"."categoryName","Categories"."icon" FROM "Records" JOIN "Categories" ON "Records"."CategoryId" = "Categories"."id" ${queryUser} ${queryCategory} ${queryMonth}  ORDER BY "Records"."date" DESC`)
 
