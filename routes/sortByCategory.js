@@ -17,15 +17,22 @@ router.get('/', authenticated, async (req, res) => {
   console.log(queryUser)
 
   // process query
-  switch (req.query.category.toString()) {
-    case "all":
-      queryCategory = ""
-      break;
-    case "none":
-      queryCategory = ""
-      break;
-    default:
-      queryCategory = `AND "Categories"."id" = ${req.query.category}`
+  // switch (req.query.category.toString()) {
+  //   case "all":
+  //     queryCategory = ""
+  //     break;
+  //   case "none":
+  //     queryCategory = ""
+  //     break;
+  //   default:
+  //     queryCategory = `AND "Categories"."id" = ${req.query.category}`
+  // }
+  console.log(req.query)
+
+  if (req.query.category !== 'all' && req.query.category !== 'none') {
+    queryCategory = `AND "Categories"."id" = ${req.query.category}`
+  } else {
+    queryCategory = ""
   }
 
   if (req.query.month == "all") {
