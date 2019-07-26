@@ -9,49 +9,40 @@ const Category = db.Category
 const { authenticated } = require('../config/auth')
 
 router.get('/', authenticated, async (req, res) => {
+
+  let queryCategory = ""
+  let queryMonth = ""
+  let selectedMonth = ""
+  let queryUser = `WHERE "Records"."UserId"=${req.user.id}`
+
+  // let selectedCategory
+  if (req.query.category.toString() == "all") {
+    queryCategory = ""
+  } else if (req.query.category.toString() == "none") {
+    queryCategory = ""
+  } else {
+    queryCategory = `AND "Categories"."id" = ${req.query.category} `
+  }
+
+  if (req.query.month == "all") {
+    queryMonth = ""
+  } else {
+    let year = Number(req.query.month.split('-')[0])
+    let month = Number(req.query.month.split('-')[1])
+    queryMonth = `AND date_part('month',"Records"."date")=${month} AND date_part('year',"Records"."date")=${year}`
+    selectedMonth = `${year}-${month} `
+  }
+
   try {
-    let queryCategory = ""
-    let queryMonth = ""
-    let selectedMonth = ""
-    let queryUser = `WHERE "Records"."UserId"=${req.user.id}`
-
-    console.log(queryUser)
-    console.log(req.query)
-    console.log(req.query.category.toString() == 'all')
-
-    if (req.query.category.toString() == "all") {
-      queryCategory = ""
-      console.log(`ALL: ${new Date()}`)
-      console.log(`queryCategory: ${queryCategory}`)
-    } else if (req.query.category.toString() == "none") {
-      queryCategory = ""
-      console.log(`NONE: ${new Date()}`)
-      console.log(`queryCategory: ${queryCategory}`)
-    } else {
-      queryCategory = `AND "Categories"."id" = ${req.query.category}`
-      console.log(`REST: ${new Date()}`)
-      console.log(`queryCategory: ${queryCategory}`)
-    }
-
-    if (req.query.month == "all") {
-      queryMonth = ""
-    } else {
-      let year = Number(req.query.month.split('-')[0])
-      let month = Number(req.query.month.split('-')[1])
-      queryMonth = `AND year("Records"."date")=${year} AND month("Records"."date")=${month}`
-      selectedMonth = `${year}-${month}`
-    }
-
     // query records
-    console.log(`AFTER queryCategory: ${queryCategory}`)
-    let rawRecords = await db.sequelize.query(`SELECT "Records"."id","Records"."date","Records"."name","Records"."amount","Records"."CategoryId", "Categories"."categoryName","Categories"."icon" FROM "Records" JOIN "Categories" ON "Records"."CategoryId" = "Categories"."id" ${queryUser} ${queryCategory} ${queryMonth}  ORDER BY "Records"."date" DESC`)
+    let rawRecords = await db.sequelize.query(`SELECT "Records"."id", "Records"."date", "Records"."name", "Records"."amount", "Records"."CategoryId", "Categories"."categoryName", "Categories"."icon" FROM "Records" JOIN "Categories" ON "Records"."CategoryId" = "Categories"."id" ${queryUser} ${queryCategory} ${queryMonth} ORDER BY "Records"."date" DESC;`)
 
     rawRecords[0].forEach(element => {
       element.date = element.date.toISOString().split("T")[0]
     });
 
     // query total amounts
-    let totalAmount = await db.sequelize.query(`SELECT SUM("Records"."amount") as "sum" FROM "Records" JOIN "Categories" ON "Records"."CategoryId" = "Categories"."id" ${queryUser} ${queryCategory} ${queryMonth}`)
+    let totalAmount = await db.sequelize.query(`SELECT SUM("Records"."amount") as "sum" FROM "Records" JOIN "Categories" ON "Records"."CategoryId" = "Categories"."id" ${queryUser} ${queryCategory} ${queryMonth} `)
 
     // query category list
     let categoryList = await Category.findAll({
@@ -63,15 +54,21 @@ router.get('/', authenticated, async (req, res) => {
       ],
     })
 
-    let selectedCategory = await Category.findAll({
-      where: {
-        id: req.query.category,
-        UserId: req.user.id
-      }
-    })
+    // query selected category 
+    if (req.query.category != 'none' && req.query.category != 'all') {
+
+      selectedCategory = await Category.findAll({
+        where: {
+          id: req.query.category,
+          UserId: req.user.id
+        }
+      })
+    } else {
+      selectedCategory = ""
+    }
 
     //query month list
-    let rawMonths = await db.sequelize.query(`SELECT "Records"."date" FROM "Records" ${queryUser} GROUP BY "Records"."date" ORDER BY "Records"."date" DESC`)
+    let rawMonths = await db.sequelize.query(`SELECT "Records"."date" FROM "Records" ${queryUser} GROUP BY "Records"."date" ORDER BY "Records"."date" DESC;`)
 
     rawMonths[0].forEach(element => {
       let year = element.date.toISOString().split("-")[0]
@@ -81,7 +78,7 @@ router.get('/', authenticated, async (req, res) => {
 
     const monthList = [... new Set(rawMonths[0].map(x => x.date))]
 
-    return res.render('index', { records: rawRecords[0], categoryList: categoryList, selectedCategory: selectedCategory[0], totalAmount: totalAmount[0][0], monthList: monthList, selectedMonth })
+    return res.render('index', { records: rawRecords[0], categoryList: categoryList, totalAmount: totalAmount[0][0], monthList: monthList, selectedMonth: selectedMonth, selectedCategory: selectedCategory[0] })
   } catch (e) {
     return res.status(422)
   }

@@ -32,20 +32,19 @@
     <div class="col">
       <select class="custom-select" onchange="submit()" name="category">
         {{#if selectedCategory}}
-        <option value="{{selectedCategory.id}}" selected>{{selectedCategory.categoryName}}</option>
-        <option value="none"> --- </option>
+        <option value={{selectedCategory.id}}>{{selectedCategory.categoryName}}</option>
+        <option value="none">---</option>
         <option value="all">All Category</option>
         {{else}}
         <option value="none">Select a category</option>
         {{/if}}
         {{#each categoryList}}
-        <option value="{{this.id}}">{{this.categoryName}}</option>
+        <option value="{{this.id}}" {{#ifEquals selectedCategory.categoryName this.id}}{{/ifEquals}}>
+          {{this.categoryName}}
+        </option>
         {{/each}}
       </select>
     </div>
-    {{!-- <div class="col">
-      <button type="submit" class="btn btn-success">Select</button>
-    </div> --}}
   </div>
 </form>
 <br>
