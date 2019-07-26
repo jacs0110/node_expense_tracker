@@ -49,4 +49,8 @@ router.get('/', authenticated, async (req, res) => {
   }
 })
 
+router.get('/privacy_policy', authenticated, (req, res) => {
+  return res.render('privacyPolicy')
+})
+
 module.exports = router
