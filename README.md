@@ -10,6 +10,9 @@ This is a web appliaction built by Node.js, Express.js, PostgreSQL and basic CRU
 4. User can sort records by month and category
 5. User can see total amount 
 
+![Imgur](https://i.imgur.com/UmH78Xl.png)
+![Imgur](https://i.imgur.com/YLIBAX0.png)
+![Imgur](https://i.imgur.com/GZsAApu.png)
 ---
 ### Getting Started
 #### Prerequisites/Environment
@@ -90,6 +93,11 @@ $ npm run dev
 
 ---
 ### Authors
-[Jacs](https://github.com/jacs0110)
+[Jacs](https://github.com/jacs0110) / [tsungtingdu](https://github.com/tsungtingdu) (Tim)
 
-*I'm now learning web development and want to become a software engineer in the future. Feel free to let me know if you have any feedback or questions about my project. Thanks!*
+Self-taught and trained in software development knowledge and skills, I am passionate about creating changes through technology.
+
+You can find more about me here:
+* [Medium](https://medium.com/tds-note)
+* [LinkedIn](https://www.linkedin.com/in/tsung-ting-tu/)
+* [Teaching Assistant at ALPHA Camp](https://lighthouse.alphacamp.co/users/3247/ta_profile)
